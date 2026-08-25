@@ -1,0 +1,58 @@
+# Dependencies
+node_modules/
+node_modules.pnpm-backup/
+
+# SvelteKit / Vite output
+.svelte-kit/
+build/
+.vite/
+
+# Environment files — only the documented template may be committed
+.env
+.env.*
+!.env.example
+
+# Local databases and runtime data
+data/
+*.db
+*.db-*
+*.sqlite
+*.sqlite-*
+*.sqlite3
+*.sqlite3-*
+
+# Wallet certificates, private keys and credentials
+certificates/
+credentials/
+secrets/
+*.p12
+*.pfx
+*.pem
+*.key
+*.cer
+*.crt
+*.mobileprovision
+service-account*.json
+google-credentials*.json
+
+# Tests and tooling
+coverage/
+.nyc_output/
+playwright-report/
+test-results/
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editors and operating systems
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.swp
+*.swo
