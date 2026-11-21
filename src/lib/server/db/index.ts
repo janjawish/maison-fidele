@@ -34,10 +34,18 @@ sqlite.exec(`
   CREATE INDEX IF NOT EXISTS transactions_member_id_idx ON transactions(member_id);
 `);
 
+// Les colonnes created_at sont en mode Drizzle `timestamp` : des secondes Unix, pas des millisecondes.
+// Répare les bases dont le jeu de démo a été inséré en millisecondes (dates affichées en l'an 58619).
+// Toute valeur au-delà de 1e11 est forcément en millisecondes : la correction est idempotente.
+sqlite.exec(`
+  UPDATE members SET created_at = created_at / 1000 WHERE created_at > 100000000000;
+  UPDATE transactions SET created_at = created_at / 1000 WHERE created_at > 100000000000;
+`);
+
 const demoExists = sqlite.prepare('SELECT id FROM members WHERE email = ?').get('camille@example.com');
 if (!demoExists) {
   const id = randomUUID();
-  const now = Date.now();
+  const now = Math.floor(Date.now() / 1000);
   sqlite.prepare(`INSERT INTO members (id, member_number, first_name, last_name, email, points, created_at)
     VALUES (?, ?, ?, ?, ?, ?, ?)`).run(id, 'MF-DEMO-001', 'Camille', 'Martin', 'camille@example.com', 120, now);
   sqlite.prepare(`INSERT INTO transactions (id, member_id, amount, balance_after, note, created_at)
